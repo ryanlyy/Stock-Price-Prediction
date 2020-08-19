@@ -19,6 +19,7 @@ import numpy as np
 import os
 import sys
 import time
+import shutil
 import pandas as pd 
 from tqdm._tqdm_notebook import tqdm_notebook
 import pickle
@@ -41,7 +42,7 @@ time.tzset()
 
 params = {
     "batch_size": 20,  # 20<16<10, 25 was a bust
-    "epochs": 300,
+    "epochs": 100,
     "lr": 0.00010000,
     "time_steps": 60
 }
@@ -55,6 +56,7 @@ TIME_STEPS = params["time_steps"]
 BATCH_SIZE = params["batch_size"]
 stime = time.time()
 
+shutil.rmtree(OUTPUT_PATH, ignore_errors=True)
 # check if directory already exists
 if not os.path.exists(OUTPUT_PATH):
     os.makedirs(OUTPUT_PATH)
