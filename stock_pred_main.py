@@ -22,11 +22,11 @@ import time
 import pandas as pd 
 from tqdm._tqdm_notebook import tqdm_notebook
 import pickle
-from keras.models import Sequential, load_model
-from keras.layers import Dense, Dropout
-from keras.layers import LSTM
-from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau, CSVLogger
-from keras import optimizers
+from tensorflow.keras.models import Sequential, load_model
+from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.layers import LSTM
+from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau, CSVLogger
+from tensorflow.keras import optimizers
 # from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
@@ -48,6 +48,7 @@ params = {
 
 iter_changes = "dropout_layers_0.4_0.4"
 
+PATH_TO_DRIVE_ML_DATA="./"
 INPUT_PATH = PATH_TO_DRIVE_ML_DATA+"/inputs"
 OUTPUT_PATH = PATH_TO_DRIVE_ML_DATA+"/outputs/lstm_best_7-3-19_12AM/"+iter_changes
 TIME_STEPS = params["time_steps"]
@@ -107,8 +108,10 @@ print(os.listdir(INPUT_PATH))
 df_ge = pd.read_csv(os.path.join(INPUT_PATH, "ge.us.txt"), engine='python')
 print(df_ge.shape)
 print(df_ge.columns)
-display(df_ge.head(5))
-tqdm_notebook.pandas('Processing...')
+#display(df_ge.head(5))
+print(df_ge.head(50))
+#tqdm_notebook.pandas('Processing...')
+print('Processing...')
 # df_ge = process_dataframe(df_ge)
 print(df_ge.dtypes)
 train_cols = ["Open","High","Low","Close","Volume"]
@@ -168,9 +171,9 @@ print("Test size", x_test_t.shape, y_test_t.shape, x_val.shape, y_val.shape)
     
 is_update_model = True
 if model is None or is_update_model:
-    from keras import backend as K
+    from tensorflow.python.keras import backend as K
     print("Building model...")
-    print("checking if GPU available", K.tensorflow_backend._get_available_gpus())
+    print("checking if GPU available", K._get_available_gpus())
     model = create_model()
     
     es = EarlyStopping(monitor='val_loss', mode='min', verbose=1,
