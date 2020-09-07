@@ -23,7 +23,7 @@ import shutil
 import pandas as pd 
 from tqdm._tqdm_notebook import tqdm_notebook
 import pickle
-from tensorflow.keras.models import Sequential, load_model
+from tensorflow.keras.models import Sequential, load_model, save_model
 from tensorflow.keras.layers import Dense, Dropout
 from tensorflow.keras.layers import LSTM
 from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau, CSVLogger
@@ -159,9 +159,10 @@ def create_model():
 
 model = None
 try:
-    model = pickle.load(open("lstm_model", 'rb'))
+    #model = pickle.load(open("lstm_model", 'rb'))
+    load_model("./lstm_model")
     print("Loaded saved model...")
-except FileNotFoundError:
+except OSError:
     print("Model not found")
 
 
@@ -196,7 +197,8 @@ if model is None or is_update_model:
                         trim_dataset(y_val, BATCH_SIZE)), callbacks=[es, mcp, csv_logger])
     
     print("saving model...")
-    pickle.dump(model, open("lstm_model", "wb"))
+    #pickle.dump(model, open("lstm_model", "wb"))
+    save_model(model, "./lstm_model")
 
 # model.evaluate(x_test_t, y_test_t, batch_size=BATCH_SIZE
 y_pred = model.predict(trim_dataset(x_test_t, BATCH_SIZE), batch_size=BATCH_SIZE)
