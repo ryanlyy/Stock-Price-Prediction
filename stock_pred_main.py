@@ -157,10 +157,12 @@ def create_model():
     return lstm_model
 
 
+save_model_file = os.path.join(OUTPUT_PATH, 'lstm_model.h5')
+
 model = None
 try:
     #model = pickle.load(open("lstm_model", 'rb'))
-    load_model("./lstm_model")
+    load_model(save_model_file)
     print("Loaded saved model...")
 except OSError:
     print("Model not found")
@@ -198,7 +200,7 @@ if model is None or is_update_model:
     
     print("saving model...")
     #pickle.dump(model, open("lstm_model", "wb"))
-    save_model(model, "./lstm_model")
+    save_model(model, save_model_file)
 
 # model.evaluate(x_test_t, y_test_t, batch_size=BATCH_SIZE
 y_pred = model.predict(trim_dataset(x_test_t, BATCH_SIZE), batch_size=BATCH_SIZE)
